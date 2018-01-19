@@ -1,15 +1,19 @@
-var http = require('http');
+var http = require('http'),
+	path = require('path');
 
-var serveStatic = require('./serveStatic');
+var dataParser = require('./dataParser'),
+	serveStatic = require('./serveStatic'),
 	calculatorHandler = require('./calculatorHandler'),
 	notFoundHandler = require('./notFoundHandler');
+	logger = require('./logger'),
+	app = require('./app');
 
-var server = http.createServer(function(req, res){
-	var resourceUrl = req.url === '/' ? 'index.html' : req.url;
-	serveStatic(req, res);
-	calculatorHandler(req, res);
-	notFoundHandler(req, res);
-});
+app.use(dataParser);
+app.use(logger);
+app.use(serveStatic(path.join(__dirname, 'public')));
+app.use(calculatorHandler);
+app.use(notFoundHandler);
 
-server.listen(8080);
+http.createServer(app).listen(8080);
+
 console.log('server listeninig on 8080!');
