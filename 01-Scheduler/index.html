@@ -33,11 +33,14 @@
 					++currentIteration;
 					if (typeof workProgressCallback === 'function'){
 						var percentCompleted = (currentIteration/totalIterations) * 100;
-						setTimeout((function (pc){
+						setTimeout(function(){
+							workProgressCallback(percentCompleted);
+						});
+						/*setTimeout((function (pc){
 							return function(){
 								workProgressCallback(pc);
 							}	
-						})(percentCompleted));
+						})(percentCompleted));*/
 						
 					}
 					if (currentIteration < totalIterations){
